@@ -355,7 +355,7 @@
         // Load the workout data from JSON file
         async function loadWorkoutData() {
             try {
-                const response = await fetch('./p90x-classic.json');
+                const response = await fetch('p90x-classic.json');
                 if (!response.ok) {
                     throw new Error('Failed to load workout data');
                 }
