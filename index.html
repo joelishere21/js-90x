@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Track your P90X Classic workout progress">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="JS90x">
+    <link rel="manifest" href="manifest.json">
+    <title>JS90x - P90X Workout Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #d4af37;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #d4af37;
+            font-size: 1.8em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        button {
+            background: #333;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .progress-overview {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #d4af37;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            background: #333;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #d4af37 0%, #ffd700 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .day-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid #333;
+            transition: all 0.3s;
+        }
+
+        .day-card:hover {
+            border-color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        .day-card.completed {
+            background: #0a3d0a;
+            border-color: #d4af37;
+        }
+
+        .day-card.current {
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .day-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        .workout-detail {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .workout-title {
+            color: #d4af37;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+        }
+
+        .exercise-list {
+            margin-top: 20px;
+        }
+
+        .exercise-item {
+            background: #000;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #d4af37;
+        }
+
+        .exercise-name {
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .exercise-description {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #d4af37;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #d4af37;
+            font-size: 2em;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .import-export {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .day-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>JS90x</h1>
+                <p class="subtitle">P90X Classic Workout Tracker</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="progress-overview">
+            <h2 style="color: #d4af37;">Your Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">0%</div>
+            </div>
+            <div class="progress-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="currentDay">1</div>
+                    <div class="stat-label">Current Day</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedDays">0</div>
+                    <div class="stat-label">Days Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="remainingDays">90</div>
+                    <div class="stat-label">Days Remaining</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="showCurrentDay()">Today's Workout</button>
+            <button onclick="exportData()">Export Progress</button>
+            <button onclick="document.getElementById('fileInput').click()">Import Progress</button>
+            <button onclick="resetProgress()">Reset All</button>
+            <input type="file" id="fileInput" accept=".json" onchange="importData(event)">
+        </div>
+
+        <h2 style="color: #d4af37; margin-bottom: 20px;">90-Day Schedule</h2>
+        <div class="day-grid" id="dayGrid"></div>
+    </div>
+
+    <div class="modal" id="workoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: #d4af37;" id="modalTitle">Day 1</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent"></div>
+            <button onclick="markComplete()" id="completeBtn" style="width: 100%; margin-top: 20px;">Mark as Complete</button>
+        </div>
+    </div>
+
+    <script>
+        let workoutData = null;
+        let userData = loadUserData();
+        let currentViewingDay = null;
+
+        // Load the workout data from JSON file
+        async function loadWorkoutData() {
+            try {
+                const response = await fetch('./p90x-classic.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load workout data');
+                }
+                workoutData = await response.json();
+                updateUI();
+            } catch (error) {
+                console.error('Error loading workout data:', error);
+                alert('Error loading workout data. Please ensure p90x-classic.json is in the same directory.');
+            }
+        }
+
+        function loadUserData() {
+            const saved = localStorage.getItem('js90x-progress');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return {
+                completedDays: [],
+                currentDay: 1,
+                startDate: new Date().toISOString()
+            };
+        }
+
+        function saveUserData() {
+            localStorage.setItem('js90x-progress', JSON.stringify(userData));
+            updateUI();
+        }
+
+        function updateUI() {
+            const completedCount = userData.completedDays.length;
+            const progressPercent = Math.round((completedCount / 90) * 100);
+            
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+            document.getElementById('progressBar').textContent = progressPercent + '%';
+            document.getElementById('currentDay').textContent = userData.currentDay;
+            document.getElementById('completedDays').textContent = completedCount;
+            document.getElementById('remainingDays').textContent = 90 - completedCount;
+            
+            renderDayGrid();
+        }
+
+        function renderDayGrid() {
+            const grid = document.getElementById('dayGrid');
+            grid.innerHTML = '';
+            
+            if (!workoutData) {
+                grid.innerHTML = '<p style="color: #999;">Loading workout data...</p>';
+                return;
+            }
+            
+            for (let i = 1; i <= 90; i++) {
+                const card = document.createElement('div');
+                card.className = 'day-card';
+                
+                if (userData.completedDays.includes(i)) {
+                    card.classList.add('completed');
+                }
+                
+                if (i === userData.currentDay) {
+                    card.classList.add('current');
+                }
+                
+                card.innerHTML = `
+                    <div class="day-number">Day ${i}</div>
+                    <div style="font-size: 0.8em; color: #999;">
+                        ${userData.completedDays.includes(i) ? '✓' : ''}
+                    </div>
+                `;
+                
+                card.onclick = () => showDay(i);
+                grid.appendChild(card);
+            }
+        }
+
+        function showDay(dayNum) {
+            if (!workoutData) {
+                alert('Workout data is still loading. Please wait.');
+                return;
+            }
+            
+            currentViewingDay = dayNum;
+            const dayData = workoutData.schedule[dayNum - 1];
+            
+            if (!dayData) return;
+            
+            document.getElementById('modalTitle').textContent = `Day ${dayNum}`;
+            
+            let content = '';
+            
+            if (dayData.workouts && dayData.workouts.length > 0) {
+                dayData.workouts.forEach(workout => {
+                    content += `<div class="workout-detail">
+                        <h3 class="workout-title">${workout.title}</h3>`;
+                    
+                    if (workout.exercises && workout.exercises.length > 0) {
+                        content += '<div class="exercise-list">';
+                        workout.exercises.forEach(exercise => {
+                            content += `
+                                <div class="exercise-item">
+                                    <div class="exercise-name">${exercise.name}</div>
+                                    <div class="exercise-description">${exercise.description}</div>
+                                </div>
+                            `;
+                        });
+                        content += '</div>';
+                    }
+                    
+                    content += '</div>';
+                });
+            } else if (dayData.note) {
+                content = `<div class="workout-detail"><p style="color: #d4af37; font-size: 1.2em;">${dayData.note}</p></div>`;
+            } else {
+                content = '<div class="workout-detail"><p style="color: #999;">Rest Day</p></div>';
+            }
+            
+            document.getElementById('modalContent').innerHTML = content;
+            
+            const completeBtn = document.getElementById('completeBtn');
+            if (userData.completedDays.includes(dayNum)) {
+                completeBtn.textContent = 'Unmark Complete';
+            } else {
+                completeBtn.textContent = 'Mark as Complete';
+            }
+            
+            document.getElementById('workoutModal').style.display = 'block';
+        }
+
+        function showCurrentDay() {
+            showDay(userData.currentDay);
+        }
+
+        function closeModal() {
+            document.getElementById('workoutModal').style.display = 'none';
+        }
+
+        function markComplete() {
+            if (!currentViewingDay) return;
+            
+            const index = userData.completedDays.indexOf(currentViewingDay);
+            
+            if (index > -1) {
+                userData.completedDays.splice(index, 1);
+            } else {
+                userData.completedDays.push(currentViewingDay);
+                
+                if (currentViewingDay === userData.currentDay && userData.currentDay < 90) {
+                    userData.currentDay++;
+                }
+            }
+            
+            saveUserData();
+            showDay(currentViewingDay);
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(userData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `js90x-progress-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.completedDays && imported.currentDay) {
+                        userData = imported;
+                        saveUserData();
+                        alert('Progress imported successfully!');
+                    } else {
+                        alert('Invalid file format');
+                    }
+                } catch (err) {
+                    alert('Error reading file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                userData = {
+                    completedDays: [],
+                    currentDay: 1,
+                    startDate: new Date().toISOString()
+                };
+                saveUserData();
+            }
+        }
+
+        window.onclick = (event) => {
+            const modal = document.getElementById('workoutModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Initialize
+        loadWorkoutData();
+        
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+    </script>
+</body>
+</html>
