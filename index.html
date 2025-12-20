@@ -66,7 +66,7 @@
             background: #1a1a1a;
             color: #90ee90;
             border: 2px solid #90ee90;
-            padding: 12px 24px;
+            padding: 12px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
@@ -501,7 +501,7 @@
                 <div style="text-align: center; margin-bottom: 20px; color: #90ee90;">${currentExerciseIndex + 1} of ${total}</div>
                 <div class="exercise-nav">
                     <button style="width: 30%; height: 65px;" onclick="prevExercise()" ${currentExerciseIndex === 0 ? 'disabled' : ''}>Previous</button>
-                    <button style="width: 30%; height: 65px;" onclick="markCompleteAndClose()">Mark Completed</button>
+                    <button style="width: 37%; height: 65px;" onclick="markCompleteAndClose()">Mark Completed</button>
                     <button style="width: 30%; height: 65px;" onclick="nextExercise()" ${currentExerciseIndex === total - 1 ? 'disabled' : ''}>Next</button>
                 </div>
             `;
