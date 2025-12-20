@@ -2,7 +2,11 @@ const CACHE_NAME = 'js90x-v1.1';
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './p90x-classic.json',
+  './android-chrome-192x192.png',
+  './android-chrome-512x512.png',
+  './favicon.ico'
 ];
 
 // Install event - cache resources
