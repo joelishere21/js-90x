@@ -1,8 +1,7 @@
-const CACHE_NAME = 'js90x-v1';
+const CACHE_NAME = 'js90x-v1.1';
 const urlsToCache = [
   './',
   './index.html',
-  './p90x-classic.json',
   './manifest.json'
 ];
 
@@ -78,13 +77,13 @@ self.addEventListener('fetch', (event) => {
 });
 
 // Background sync for data backup (optional enhancement)
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'backup-progress') {
-    event.waitUntil(backupProgress());
-  }
-});
+// self.addEventListener('sync', (event) => {
+//   if (event.tag === 'backup-progress') {
+//     event.waitUntil(backupProgress());
+//   }
+// });
 
-async function backupProgress() {
-  // This could be enhanced to sync progress data to a server
-  console.log('Background sync triggered');
-}
+// async function backupProgress() {
+//   // This could be enhanced to sync progress data to a server
+//   console.log('Background sync triggered');
+// }
