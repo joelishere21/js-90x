@@ -332,10 +332,10 @@
                     <div class="stat-value" id="currentDay">1</div>
                     <div class="stat-label">Current Day</div>
                 </div>
-                <div class="stat-card">
+                <!-- <div class="stat-card">
                     <div class="stat-value" id="completedDays">0</div>
                     <div class="stat-label">Days Completed</div>
-                </div>
+                </div> -->
                 <div class="stat-card">
                     <div class="stat-value" id="remainingDays">90</div>
                     <div class="stat-label">Days Remaining</div>
@@ -407,7 +407,7 @@
             document.getElementById('progressBar').style.width = progressPercent + '%';
             document.getElementById('progressBar').textContent = progressPercent + '%';
             document.getElementById('currentDay').textContent = userData.currentDay;
-            document.getElementById('completedDays').textContent = completedCount;
+            // document.getElementById('completedDays').textContent = completedCount;
             document.getElementById('remainingDays').textContent = 90 - completedCount;
             
             renderDayGrid();
@@ -500,9 +500,9 @@
                 </div>
                 <div style="text-align: center; margin-bottom: 20px; color: #90ee90;">${currentExerciseIndex + 1} of ${total}</div>
                 <div class="exercise-nav">
-                    <button onclick="prevExercise()" ${currentExerciseIndex === 0 ? 'disabled' : ''}>Previous</button>
-                    <button onclick="markCompleteAndClose()">Mark Completed</button>
-                    <button onclick="nextExercise()" ${currentExerciseIndex === total - 1 ? 'disabled' : ''}>Next</button>
+                    <button style="width: 30%; height: 65px;" onclick="prevExercise()" ${currentExerciseIndex === 0 ? 'disabled' : ''}>Previous</button>
+                    <button style="width: 30%; height: 65px;" onclick="markCompleteAndClose()">Mark Completed</button>
+                    <button style="width: 30%; height: 65px;" onclick="nextExercise()" ${currentExerciseIndex === total - 1 ? 'disabled' : ''}>Next</button>
                 </div>
             `;
             if (currentExerciseIndex === total - 1) {
