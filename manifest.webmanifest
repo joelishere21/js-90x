@@ -2,7 +2,7 @@
   "name": "JS90x - P90X Classic Workout Tracker",
   "short_name": "JS90x",
   "description": "Track your P90X Classic workout progress through the complete 90-day program",
-  "version": "1.01",
+  "version": "1.2",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
