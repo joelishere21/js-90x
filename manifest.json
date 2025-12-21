@@ -2,11 +2,12 @@
   "name": "JS90x - P90X Classic Workout Tracker",
   "short_name": "JS90x",
   "description": "Track your P90X Classic workout progress through the complete 90-day program",
+  "version": "1.0",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "./android-chrome-192x192.png",
@@ -18,10 +19,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "categories": [
-    "health",
-    "fitness",
-    "lifestyle"
   ]
 }
