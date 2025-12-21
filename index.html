@@ -333,10 +333,10 @@
                     <div class="stat-value" id="currentDay">1</div>
                     <div class="stat-label">Current Day</div>
                 </div>
-                <!-- <div class="stat-card">
+                <div class="stat-card" style="display: none;">
                     <div class="stat-value" id="completedDays">0</div>
                     <div class="stat-label">Days Completed</div>
-                </div> -->
+                </div>
                 <div class="stat-card">
                     <div class="stat-value" id="remainingDays">90</div>
                     <div class="stat-label">Days Remaining</div>
@@ -408,7 +408,7 @@
             document.getElementById('progressBar').style.width = progressPercent + '%';
             document.getElementById('progressBar').textContent = progressPercent + '%';
             document.getElementById('currentDay').textContent = userData.currentDay;
-            // document.getElementById('completedDays').textContent = completedCount;
+            document.getElementById('completedDays').textContent = completedCount;
             document.getElementById('remainingDays').textContent = 90 - completedCount;
             
             renderDayGrid();
