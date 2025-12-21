@@ -458,13 +458,15 @@
             
             if (!dayData) return;
             
-            document.getElementById('modalTitle').textContent = `Day ${dayNum}`;
+            document.getElementById('modalTitle').textContent = `${dayData.workouts[0].title} - Day ${dayNum}`;
             
             exerciseList = [];
             if (dayData.workouts && dayData.workouts.length > 0) {
                 for (const workout of dayData.workouts) {
                     if (workout.exercises) {
-                        exerciseList.push(...workout.exercises);
+                        for (const ex of workout.exercises) {
+                            exerciseList.push({exercise: ex, workoutTitle: workout.title});
+                        }
                     }
                 }
             }
@@ -492,8 +494,11 @@
         }
 
         function showCurrentExercise() {
-            const exercise = exerciseList[currentExerciseIndex];
+            const item = exerciseList[currentExerciseIndex];
+            const exercise = item.exercise;
+            const workoutTitle = item.workoutTitle;
             const total = exerciseList.length;
+            // <div style="color: #90ee90; font-size: 1.2em; margin-bottom: 10px; font-weight: bold;">${workoutTitle}</div>
             let content = `
                 <div class="exercise-card">
                     <div class="exercise-name">${exercise.name}</div>
